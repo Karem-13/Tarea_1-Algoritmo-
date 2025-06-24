@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicios de Arreglos y Cadenas</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 30px;
+      margin: 0;
+      font-size: 2.2rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    section {
+      background: white;
+      margin-bottom: 25px;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      border-left: 4px solid #667eea;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+    }
+
+    h2::before {
+      content: "⚡";
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 250px;
+      padding: 12px 15px;
+      border: 2px solid #e1e8ed;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    button {
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .btn-limpiar {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-limpiar:hover {
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .resultado {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 500;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      background: #f0f9ff;
+      border: 1px solid #e0f2fe;
+      color: #0c4a6e;
+      transition: all 0.3s ease;
+    }
+
+    .resultado:not(:empty) {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border-color: #86efac;
+      color: #065f46;
+      animation: slideIn 0.5s ease;
+    }
+
+    .resultado.error {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border-color: #f87171;
+      color: #991b1b;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .numero-perfecto {
+      color: #059669;
+      font-weight: bold;
+    }
+
+    .numero-no-perfecto {
+      color: #dc2626;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 10px;
+        border-radius: 10px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        padding: 20px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      section {
+        padding: 20px;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      input[type="text"] {
+        min-width: 100%;
+      }
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔢 Ejercicios con Arreglos y Cadenas</h1>
+    
+    <div class="content">
+      <!-- Ejercicio: Convertir texto a arreglo de números -->
+      <section>
+        <h2>Convertir texto a números</h2>
+        <div class="input-group">
+          <input type="text" id="entradaNumeros" placeholder="Ingresa números separados por comas (Ej: 10,20,30)">
+          <button onclick="convertirANumeros()">🔄 Convertir</button>
+          <button class="btn-limpiar" onclick="limpiarSeccion('entradaNumeros', 'resultadoNumeros')">🗑️ Limpiar</button>
+        </div>
+        <div id="resultadoNumeros" class="resultado"></div>
+      </section>
+      
+      <!-- Ejercicio: Separar nombres -->
+      <section>
+        <h2>Separar lista de nombres</h2>
+        <div class="input-group">
+          <input type="text" id="entradaNombres" placeholder="Ingresa nombres separados por comas (Ej: Ana,Luis,Pedro)">
+          <button onclick="separarNombres()">📝 Separar</button>
+          <button class="btn-limpiar" onclick="limpiarSeccion('entradaNombres', 'resultadoNombres')">🗑️ Limpiar</button>
+        </div>
+        <div id="resultadoNombres" class="resultado"></div>
+      </section>
+      
+      <!-- Ejercicio: Mostrar divisores -->
+      <section>
+        <h2>Mostrar divisores</h2>
+        <div class="input-group">
+          <input type="text" id="entradaDivisores" placeholder="Ingresa números para encontrar sus divisores (Ej: 6,10)">
+          <button onclick="mostrarDivisores()">🔍 Mostrar Divisores</button>
+          <button class="btn-limpiar" onclick="limpiarSeccion('entradaDivisores', 'resultadoDivisores')">🗑️ Limpiar</button>
+        </div>
+        <div id="resultadoDivisores" class="resultado"></div>
+      </section>
+      
+      <!-- Ejercicio: Sumar divisores -->
+      <section>
+        <h2>Sumar divisores propios</h2>
+        <div class="input-group">
+          <input type="text" id="entradaSumarDivisores" placeholder="Ingresa números para sumar sus divisores propios (Ej: 6,10)">
+          <button onclick="sumarDivisores()">➕ Sumar Divisores</button>
+          <button class="btn-limpiar" onclick="limpiarSeccion('entradaSumarDivisores', 'resultadoSumaDivisores')">🗑️ Limpiar</button>
+        </div>
+        <div id="resultadoSumaDivisores" class="resultado"></div>
+      </section>
+      
+      <!-- Ejercicio: Verificar números perfectos -->
+      <section>
+        <h2>Verificar números perfectos</h2>
+        <div class="input-group">
+          <input type="text" id="entradaPerfectos" placeholder="Ingresa números para verificar si son perfectos (Ej: 6,10,28)">
+          <button onclick="verificarPerfectos()">✨ Verificar Perfectos</button>
+          <button class="btn-limpiar" onclick="limpiarSeccion('entradaPerfectos', 'resultadoPerfectos')">🗑️ Limpiar</button>
+        </div>
+        <div id="resultadoPerfectos" class="resultado"></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Función para limpiar una sección específica
+    function limpiarSeccion(inputId, resultadoId) {
+      document.getElementById(inputId).value = '';
+      const elementoResultado = document.getElementById(resultadoId);
+      elementoResultado.innerHTML = '';
+      elementoResultado.className = 'resultado';
+    }
+
+    // Función para limpiar todas las secciones
+    function limpiarTodo() {
+      const inputs = ['entradaNumeros', 'entradaNombres', 'entradaDivisores', 'entradaSumarDivisores', 'entradaPerfectos'];
+      const resultados = ['resultadoNumeros', 'resultadoNombres', 'resultadoDivisores', 'resultadoSumaDivisores', 'resultadoPerfectos'];
+      
+      inputs.forEach(id => document.getElementById(id).value = '');
+      resultados.forEach(id => {
+        const elemento = document.getElementById(id);
+        elemento.innerHTML = '';
+        elemento.className = 'resultado';
+      });
+    }
+
+    // Función para limpiar y validar entrada
+    function limpiarEntrada(texto) {
+      return texto.trim().replace(/\s+/g, '');
+    }
+
+    // Función para mostrar loading
+    function mostrarLoading(elementoId) {
+      const elemento = document.getElementById(elementoId);
+      elemento.innerHTML = '<span class="loading"></span>Procesando...';
+      elemento.className = 'resultado';
+    }
+
+    // Función para mostrar error
+    function mostrarError(elementoId, mensaje) {
+      const elemento = document.getElementById(elementoId);
+      elemento.textContent = `❌ Error: ${mensaje}`;
+      elemento.className = 'resultado error';
+    }
+
+    // Función para mostrar resultado exitoso
+    function mostrarExito(elementoId, contenido) {
+      const elemento = document.getElementById(elementoId);
+      elemento.innerHTML = contenido;
+      elemento.className = 'resultado';
+    }
+
+    function convertirANumeros() {
+      const texto = document.getElementById("entradaNumeros").value;
+      const elementoResultado = "resultadoNumeros";
+      
+      if (!texto.trim()) {
+        mostrarError(elementoResultado, "Por favor ingresa algunos números");
+        return;
+      }
+
+      mostrarLoading(elementoResultado);
+      
+      setTimeout(() => {
+        try {
+          const textoLimpio = limpiarEntrada(texto);
+          const numeros = textoLimpio.split(",").map(str => {
+            const num = Number(str.trim());
+            if (isNaN(num)) {
+              throw new Error(`"${str}" no es un número válido`);
+            }
+            return num;
+          });
+          
+          mostrarExito(elementoResultado, `✅ <strong>Números convertidos:</strong> ${numeros.join(" • ")}`);
+        } catch (error) {
+          mostrarError(elementoResultado, error.message);
+        }
+      }, 300);
+    }
+
+    function separarNombres() {
+      const texto = document.getElementById("entradaNombres").value;
+      const elementoResultado = "resultadoNombres";
+      
+      if (!texto.trim()) {
+        mostrarError(elementoResultado, "Por favor ingresa algunos nombres");
+        return;
+      }
+
+      mostrarLoading(elementoResultado);
+      
+      setTimeout(() => {
+        try {
+          const nombres = texto.split(",").map(nombre => nombre.trim()).filter(nombre => nombre.length > 0);
+          
+          if (nombres.length === 0) {
+            throw new Error("No se encontraron nombres válidos");
+          }
+          
+          mostrarExito(elementoResultado, `✅ <strong>Nombres separados (${nombres.length}):</strong> ${nombres.join(" | ")}`);
+        } catch (error) {
+          mostrarError(elementoResultado, error.message);
+        }
+      }, 300);
+    }
+
+    function mostrarDivisores() {
+      const texto = document.getElementById("entradaDivisores").value;
+      const elementoResultado = "resultadoDivisores";
+      
+      if (!texto.trim()) {
+        mostrarError(elementoResultado, "Por favor ingresa algunos números");
+        return;
+      }
+
+      mostrarLoading(elementoResultado);
+      
+      setTimeout(() => {
+        try {
+          const textoLimpio = limpiarEntrada(texto);
+          const numeros = textoLimpio.split(",").map(str => {
+            const num = Number(str.trim());
+            if (isNaN(num) || num <= 0) {
+              throw new Error(`"${str}" no es un número positivo válido`);
+            }
+            return Math.floor(num);
+          });
+          
+          let resultado = "✅ <strong>Divisores encontrados:</strong><br><br>";
+          
+          for (let numero of numeros) {
+            const divisores = [];
+            for (let d = 1; d <= numero; d++) {
+              if (numero % d === 0) {
+                divisores.push(d);
+              }
+            }
+            resultado += `🔸 <strong>${numero}:</strong> ${divisores.join(", ")} <em>(${divisores.length} divisores)</em><br>`;
+          }
+          
+          mostrarExito(elementoResultado, resultado);
+        } catch (error) {
+          mostrarError(elementoResultado, error.message);
+        }
+      }, 300);
+    }
+
+    function sumarDivisores() {
+      const texto = document.getElementById("entradaSumarDivisores").value;
+      const elementoResultado = "resultadoSumaDivisores";
+      
+      if (!texto.trim()) {
+        mostrarError(elementoResultado, "Por favor ingresa algunos números");
+        return;
+      }
+
+      mostrarLoading(elementoResultado);
+      
+      setTimeout(() => {
+        try {
+          const textoLimpio = limpiarEntrada(texto);
+          const numeros = textoLimpio.split(",").map(str => {
+            const num = Number(str.trim());
+            if (isNaN(num) || num <= 0) {
+              throw new Error(`"${str}" no es un número positivo válido`);
+            }
+            return Math.floor(num);
+          });
+          
+          let resultado = "✅ <strong>Suma de divisores propios:</strong><br><br>";
+          
+          for (let numero of numeros) {
+            let suma = 0;
+            const divisores = [];
+            
+            for (let d = 1; d < numero; d++) {
+              if (numero % d === 0) {
+                suma += d;
+                divisores.push(d);
+              }
+            }
+            
+            resultado += `🔸 <strong>${numero}:</strong> ${divisores.join(" + ")} = <strong>${suma}</strong><br>`;
+          }
+          
+          mostrarExito(elementoResultado, resultado);
+        } catch (error) {
+          mostrarError(elementoResultado, error.message);
+        }
+      }, 300);
+    }
+
+    function verificarPerfectos() {
+      const texto = document.getElementById("entradaPerfectos").value;
+      const elementoResultado = "resultadoPerfectos";
+      
+      if (!texto.trim()) {
+        mostrarError(elementoResultado, "Por favor ingresa algunos números");
+        return;
+      }
+
+      mostrarLoading(elementoResultado);
+      
+      setTimeout(() => {
+        try {
+          const textoLimpio = limpiarEntrada(texto);
+          const numeros = textoLimpio.split(",").map(str => {
+            const num = Number(str.trim());
+            if (isNaN(num) || num <= 0) {
+              throw new Error(`"${str}" no es un número positivo válido`);
+            }
+            return Math.floor(num);
+          });
+          
+          let resultado = "✅ <strong>Verificación de números perfectos:</strong><br><br>";
+          let perfectosEncontrados = 0;
+          
+          for (let numero of numeros) {
+            let suma = 0;
+            const divisores = [];
+            
+            for (let d = 1; d < numero; d++) {
+              if (numero % d === 0) {
+                suma += d;
+                divisores.push(d);
+              }
+            }
+            
+            const esPerfecto = suma === numero;
+            if (esPerfecto) perfectosEncontrados++;
+            
+            const clase = esPerfecto ? 'numero-perfecto' : 'numero-no-perfecto';
+            const icono = esPerfecto ? '✨' : '❌';
+            
+            resultado += `${icono} <span class="${clase}"><strong>${numero}</strong> ${esPerfecto ? 'ES PERFECTO' : 'NO es perfecto'}</span><br>`;
+            resultado += `&nbsp;&nbsp;&nbsp;&nbsp;Divisores propios: ${divisores.join(" + ")} = ${suma}<br><br>`;
+          }
+          
+          if (perfectosEncontrados > 0) {
+            resultado += `<strong>🎉 Se encontraron ${perfectosEncontrados} número(s) perfecto(s)!</strong>`;
+          }
+          
+          mostrarExito(elementoResultado, resultado);
+        } catch (error) {
+          mostrarError(elementoResultado, error.message);
+        }
+      }, 300);
+    }
+
+    // Agregar funcionalidad de Enter para ejecutar
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input[type="text"]');
+      
+      // Mapear cada input con su función correspondiente
+      const funcionesPorInput = {
+        'entradaNumeros': convertirANumeros,
+        'entradaNombres': separarNombres,
+        'entradaDivisores': mostrarDivisores,
+        'entradaSumarDivisores': sumarDivisores,
+        'entradaPerfectos': verificarPerfectos
+      };
+      
+      inputs.forEach((input) => {
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            const funcionCorrespondiente = funcionesPorInput[input.id];
+            if (funcionCorrespondiente) {
+              funcionCorrespondiente();
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
